@@ -19,6 +19,9 @@ const steps = [
 
 const fieldClass = "mt-1.5 w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm outline-none transition-colors focus:border-academic";
 
+/** Semester 0 holds courses that are optional to take, not part of a fixed term. */
+const semesterLabel = (semester: number) => (semester === 0 ? "Semester 0 · opsional" : `Semester ${semester}`);
+
 export function Onboarding({ onComplete, initial = null, onCancel }: { onComplete: (setup: StudentSetup) => void; initial?: StudentSetup | null; onCancel?: (() => void) | undefined }) {
   const editing = Boolean(initial);
   const [step, setStep] = useState(1);
@@ -264,7 +267,7 @@ export function Onboarding({ onComplete, initial = null, onCancel }: { onComplet
                   {semesterGroups.map((group) => (
                     <div key={group.semester} className="rounded-xl bg-muted p-3.5">
                       <div className="flex items-center justify-between">
-                        <p className="text-sm font-bold">Semester {group.semester}</p>
+                        <p className="text-sm font-bold">{semesterLabel(group.semester)}</p>
                         <span className="rounded-full bg-accent px-2 py-0.5 text-[10px] font-semibold text-academic">{sksTotal(group.courses.map((course) => course.code))} SKS</span>
                       </div>
                       <p className="mt-1.5 text-xs leading-5 text-muted-foreground">{group.courses.map((course) => course.name).join(" · ")}</p>
@@ -293,7 +296,7 @@ export function Onboarding({ onComplete, initial = null, onCancel }: { onComplet
               </div>
               {semesterGroups.map((group) => (
                 <div key={group.semester} className="academic-card p-5">
-                  <p className="text-sm font-bold">Semester {group.semester}</p>
+                  <p className="text-sm font-bold">{semesterLabel(group.semester)}</p>
                   <div className="mt-3 grid gap-2 sm:grid-cols-2">
                     {group.courses.map((course) => {
                       const picked = completed.includes(course.code);
@@ -321,7 +324,7 @@ export function Onboarding({ onComplete, initial = null, onCancel }: { onComplet
               </div>
               <CoursePicker title={`Rekomendasi — semester ${semester}`} courses={suggestedNow} selected={activeCodes} completed={completed} onToggle={toggleActive} />
               {semesterGroups.filter((group) => group.semester !== semester).map((group) => (
-                <CoursePicker key={group.semester} title={`Semester ${group.semester}`} courses={group.courses} selected={activeCodes} completed={completed} onToggle={toggleActive} />
+                <CoursePicker key={group.semester} title={semesterLabel(group.semester)} courses={group.courses} selected={activeCodes} completed={completed} onToggle={toggleActive} />
               ))}
             </section>
           )}

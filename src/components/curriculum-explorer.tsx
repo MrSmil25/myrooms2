@@ -106,7 +106,9 @@ export function CurriculumExplorer({
           {semesters.map(([semester, courses]) => (
             <section key={semester}>
               <div className="mb-3 flex items-center justify-between gap-3">
-                <h2 className="text-base font-bold md:text-lg">Semester {semester}</h2>
+                <h2 className="text-base font-bold md:text-lg">
+                  {semester === 0 ? "Semester 0 · mata kuliah opsional" : `Semester ${semester}`}
+                </h2>
                 <span className="rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-academic">
                   {courses.reduce((total, course) => total + (course.sks ?? 0), 0)} SKS · {courses.length} mata kuliah
                 </span>
