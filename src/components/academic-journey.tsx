@@ -68,8 +68,8 @@ export function JourneyCard({ onOpen, setup = null, credits }: { onOpen: () => v
   );
 }
 
-export function AcademicJourney({ onBack, onOpenCourse, setup = null }: { onBack: () => void; onOpenCourse: (course: CurriculumCourse) => void; setup?: StudentSetup | null }) {
-  const { statuses, tracker, custom, setStatus, addCustom, removeCustom } = useRoadmap(setup);
+export function AcademicJourney({ onBack, onOpenCourse, setup = null, credits }: { onBack: () => void; onOpenCourse: (course: CurriculumCourse) => void; setup?: StudentSetup | null; credits?: CreditOverride }) {
+  const { statuses, tracker, custom, setStatus, addCustom, removeCustom } = useRoadmap(setup, credits);
   const info = programLine(setup);
   const currentSemester = setup?.currentSemester ?? studentProfile.currentSemester;
   const entryYear = setup?.entryYear ?? studentProfile.entryYear;
