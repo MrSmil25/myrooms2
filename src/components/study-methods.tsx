@@ -262,6 +262,7 @@ export function StudyMethodsView() {
       </div>
 
       <MethodTimer key={active.id} method={active} />
+      <StudyTodoList />
       <Stopwatch />
       <StudyHistory />
       <StudyNotes />
