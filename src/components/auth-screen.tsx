@@ -77,22 +77,18 @@ export function AuthScreen() {
         <div className="academic-card overflow-hidden">
           <div className="h-1.5 bg-primary" />
           <div className="p-6 md:p-7">
-            <h1 className="text-xl font-bold">{mode === "signin" ? "Welcome back" : "Create your workspace"}</h1>
+            <h1 className="text-xl font-bold">
+              {mode === "signin" ? "Welcome back" : mode === "signup" ? "Create your workspace" : "Lupa password"}
+            </h1>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
               {mode === "signin"
                 ? "Sign in to open your courses, curriculum, tasks, and study materials."
-                : "One account keeps your academic data private and available on every device."}
+                : mode === "signup"
+                  ? "One account keeps your academic data private and available on every device."
+                  : "Masukkan email akunmu. Kami kirim tautan untuk membuat password baru."}
             </p>
 
-            <Button variant="outline" className="mt-5 w-full" onClick={google} disabled={busy}>
-              <LogIn /> Continue with Google
-            </Button>
-
-            <div className="my-5 flex items-center gap-3 text-[11px] font-semibold uppercase text-muted-foreground">
-              <span className="h-px flex-1 bg-border" />or with email<span className="h-px flex-1 bg-border" />
-            </div>
-
-            <form onSubmit={submit} className="space-y-3">
+            <form onSubmit={submit} className="mt-5 space-y-3">
               <label className="block">
                 <span className="text-xs font-semibold text-muted-foreground">Email</span>
                 <input
@@ -104,33 +100,45 @@ export function AuthScreen() {
                   className="mt-1 w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
                 />
               </label>
-              <label className="block">
-                <span className="text-xs font-semibold text-muted-foreground">Password</span>
-                <input
-                  type="password"
-                  autoComplete={mode === "signin" ? "current-password" : "new-password"}
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                  placeholder="At least 6 characters"
-                  className="mt-1 w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
-                />
-              </label>
+              {mode !== "forgot" && (
+                <label className="block">
+                  <span className="text-xs font-semibold text-muted-foreground">Password</span>
+                  <input
+                    type="password"
+                    autoComplete={mode === "signin" ? "current-password" : "new-password"}
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    placeholder="At least 6 characters"
+                    className="mt-1 w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  />
+                </label>
+              )}
 
               {error && <p className="rounded-xl bg-destructive/10 p-3 text-xs font-medium text-destructive">{error}</p>}
               {message && <p className="rounded-xl bg-success/12 p-3 text-xs font-medium text-success">{message}</p>}
 
               <Button type="submit" variant="academic" className="w-full" disabled={busy}>
-                {busy ? <Loader2 className="animate-spin" /> : <Mail />}
-                {mode === "signin" ? "Sign in" : "Create account"}
+                {busy ? <Loader2 className="animate-spin" /> : mode === "forgot" ? <KeyRound /> : <Mail />}
+                {mode === "signin" ? "Sign in" : mode === "signup" ? "Create account" : "Kirim tautan reset"}
               </Button>
             </form>
 
+            {mode === "signin" && (
+              <button
+                type="button"
+                onClick={() => switchMode("forgot")}
+                className="mt-4 w-full text-center text-xs font-semibold text-muted-foreground hover:text-academic"
+              >
+                Lupa password?
+              </button>
+            )}
+
             <button
               type="button"
-              onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setError(null); setMessage(null); }}
-              className="mt-5 w-full text-center text-xs font-semibold text-academic"
+              onClick={() => switchMode(mode === "signin" ? "signup" : "signin")}
+              className="mt-3 w-full text-center text-xs font-semibold text-academic"
             >
-              {mode === "signin" ? "New here? Create an account" : "Already have an account? Sign in"}
+              {mode === "signin" ? "New here? Create an account" : mode === "signup" ? "Already have an account? Sign in" : "Kembali ke halaman masuk"}
             </button>
           </div>
         </div>
