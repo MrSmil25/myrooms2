@@ -104,7 +104,7 @@ export function graduationTracker(statuses: Map<string, CourseStatus>, override?
 
 
 /** Client-only roadmap state: status overrides and courses outside the curriculum. */
-export function useRoadmap(setup: StudentSetup | null) {
+export function useRoadmap(setup: StudentSetup | null, credits?: CreditOverride) {
   const [state, setState] = useState<RoadmapState>(empty);
 
   useEffect(() => {
