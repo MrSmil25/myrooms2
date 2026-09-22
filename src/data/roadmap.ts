@@ -122,7 +122,7 @@ export function useRoadmap(setup: StudentSetup | null, credits?: CreditOverride)
   return {
     statuses,
     custom: state.custom,
-    tracker: graduationTracker(statuses),
+    tracker: graduationTracker(statuses, credits),
     setStatus: (code: string, status: CourseStatus) => {
       const overrides = { ...state.overrides };
       if (status === "upcoming") delete overrides[code];
