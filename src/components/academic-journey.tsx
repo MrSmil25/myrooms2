@@ -7,7 +7,7 @@ import { studentProfile } from "@/data/profile";
 import { TOTAL_SKS, courseByCode, curriculum, curriculumStructure, type CurriculumCourse } from "@/data/curriculum";
 import { academicYearLabel } from "@/data/semester";
 import type { StudentSetup } from "@/data/setup";
-import { missingPrereqs, recommendNextSemester, statusLabel, statusStyle, useRoadmap, type CourseStatus } from "@/data/roadmap";
+import { missingPrereqs, recommendNextSemester, statusLabel, statusStyle, useRoadmap, type CourseStatus, type CreditOverride } from "@/data/roadmap";
 import { EmptyState } from "@/components/empty-state";
 
 const CURRICULUM_YEAR = 2024;
