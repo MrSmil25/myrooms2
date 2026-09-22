@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { Loader2, LogIn, Mail } from "lucide-react";
+import { Loader2, Mail, KeyRound } from "lucide-react";
 import logoAsset from "@/assets/logo-my-room.png";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 
 /**
- * Entry point of the workspace: email/password or Google.
+ * Entry point of the workspace: email/password only.
  * Uses the same academic card, colors, and typography as the rest of the app.
  */
 export function AuthScreen() {
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [mode, setMode] = useState<"signin" | "signup" | "forgot">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
