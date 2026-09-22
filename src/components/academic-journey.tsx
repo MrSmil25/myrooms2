@@ -33,8 +33,8 @@ function programLine(setup: StudentSetup | null) {
   };
 }
 
-export function JourneyCard({ onOpen, setup = null }: { onOpen: () => void; setup?: StudentSetup | null }) {
-  const { statuses, tracker } = useRoadmap(setup);
+export function JourneyCard({ onOpen, setup = null, credits }: { onOpen: () => void; setup?: StudentSetup | null; credits?: CreditOverride }) {
+  const { statuses, tracker } = useRoadmap(setup, credits);
   const info = programLine(setup);
   const semester = setup?.currentSemester ?? studentProfile.currentSemester;
   const completedCourses = curriculum.filter((course) => statuses.get(course.code) === "completed").length;
