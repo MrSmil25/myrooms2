@@ -81,24 +81,30 @@ export function recommendNextSemester(setup: StudentSetup | null, statuses: Map<
     .slice(0, 8);
 }
 
-export function graduationTracker(statuses: Map<string, CourseStatus>) {
-  const completedSks = curriculum
+/** Angka SKS resmi dari akun (jika ada) supaya semua halaman menampilkan nilai yang sama. */
+export type CreditOverride = { completedSks?: number | null; requiredSks?: number | null };
+
+export function graduationTracker(statuses: Map<string, CourseStatus>, override?: CreditOverride) {
+  const derived = curriculum
     .filter((course) => statuses.get(course.code) === "completed")
     .reduce((sum, course) => sum + course.sks, 0);
+  const completedSks = override?.completedSks && override.completedSks > 0 ? override.completedSks : derived;
+  const requiredSks = override?.requiredSks && override.requiredSks > 0 ? override.requiredSks : TOTAL_SKS;
   const currentSks = curriculum
     .filter((course) => statuses.get(course.code) === "current")
     .reduce((sum, course) => sum + course.sks, 0);
   return {
     completedSks,
     currentSks,
-    requiredSks: TOTAL_SKS,
-    remainingSks: Math.max(TOTAL_SKS - completedSks, 0),
-    percent: Math.min(Math.round((completedSks / TOTAL_SKS) * 100), 100),
+    requiredSks,
+    remainingSks: Math.max(requiredSks - completedSks, 0),
+    percent: Math.min(Math.round((completedSks / requiredSks) * 100), 100),
   };
 }
 
+
 /** Client-only roadmap state: status overrides and courses outside the curriculum. */
-export function useRoadmap(setup: StudentSetup | null) {
+export function useRoadmap(setup: StudentSetup | null, credits?: CreditOverride) {
   const [state, setState] = useState<RoadmapState>(empty);
 
   useEffect(() => {
@@ -116,7 +122,7 @@ export function useRoadmap(setup: StudentSetup | null) {
   return {
     statuses,
     custom: state.custom,
-    tracker: graduationTracker(statuses),
+    tracker: graduationTracker(statuses, credits),
     setStatus: (code: string, status: CourseStatus) => {
       const overrides = { ...state.overrides };
       if (status === "upcoming") delete overrides[code];

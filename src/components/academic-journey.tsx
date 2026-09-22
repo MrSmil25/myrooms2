@@ -7,7 +7,7 @@ import { studentProfile } from "@/data/profile";
 import { TOTAL_SKS, courseByCode, curriculum, curriculumStructure, type CurriculumCourse } from "@/data/curriculum";
 import { academicYearLabel } from "@/data/semester";
 import type { StudentSetup } from "@/data/setup";
-import { missingPrereqs, recommendNextSemester, statusLabel, statusStyle, useRoadmap, type CourseStatus } from "@/data/roadmap";
+import { missingPrereqs, recommendNextSemester, statusLabel, statusStyle, useRoadmap, type CourseStatus, type CreditOverride } from "@/data/roadmap";
 import { EmptyState } from "@/components/empty-state";
 
 const CURRICULUM_YEAR = 2024;
@@ -33,8 +33,8 @@ function programLine(setup: StudentSetup | null) {
   };
 }
 
-export function JourneyCard({ onOpen, setup = null }: { onOpen: () => void; setup?: StudentSetup | null }) {
-  const { statuses, tracker } = useRoadmap(setup);
+export function JourneyCard({ onOpen, setup = null, credits }: { onOpen: () => void; setup?: StudentSetup | null; credits?: CreditOverride }) {
+  const { statuses, tracker } = useRoadmap(setup, credits);
   const info = programLine(setup);
   const semester = setup?.currentSemester ?? studentProfile.currentSemester;
   const completedCourses = curriculum.filter((course) => statuses.get(course.code) === "completed").length;
@@ -68,8 +68,8 @@ export function JourneyCard({ onOpen, setup = null }: { onOpen: () => void; setu
   );
 }
 
-export function AcademicJourney({ onBack, onOpenCourse, setup = null }: { onBack: () => void; onOpenCourse: (course: CurriculumCourse) => void; setup?: StudentSetup | null }) {
-  const { statuses, tracker, custom, setStatus, addCustom, removeCustom } = useRoadmap(setup);
+export function AcademicJourney({ onBack, onOpenCourse, setup = null, credits }: { onBack: () => void; onOpenCourse: (course: CurriculumCourse) => void; setup?: StudentSetup | null; credits?: CreditOverride }) {
+  const { statuses, tracker, custom, setStatus, addCustom, removeCustom } = useRoadmap(setup, credits);
   const info = programLine(setup);
   const currentSemester = setup?.currentSemester ?? studentProfile.currentSemester;
   const entryYear = setup?.entryYear ?? studentProfile.entryYear;

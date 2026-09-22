@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { StudyHistory } from "@/components/study-history";
 import { StudyNotes } from "@/components/study-notes";
+import { StudyTodoList } from "@/components/study-todo";
 import { logStudySession } from "@/lib/study-log";
 
 type Method = {
@@ -261,6 +262,7 @@ export function StudyMethodsView() {
       </div>
 
       <MethodTimer key={active.id} method={active} />
+      <StudyTodoList />
       <Stopwatch />
       <StudyHistory />
       <StudyNotes />
