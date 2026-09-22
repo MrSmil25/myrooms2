@@ -20,6 +20,22 @@ export function AuthScreen() {
     event.preventDefault();
     setError(null);
     setMessage(null);
+
+    if (mode === "forgot") {
+      if (!email.trim()) {
+        setError("Masukkan email akunmu terlebih dahulu.");
+        return;
+      }
+      setBusy(true);
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (resetError) setError(friendly(resetError.message));
+      else setMessage("Tautan untuk mengatur ulang password sudah dikirim ke emailmu.");
+      setBusy(false);
+      return;
+    }
+
     if (!email.trim() || password.length < 6) {
       setError("Enter your email and a password of at least 6 characters.");
       return;
@@ -40,18 +56,12 @@ export function AuthScreen() {
     setBusy(false);
   };
 
-  const google = async () => {
+  const switchMode = (next: "signin" | "signup" | "forgot") => {
+    setMode(next);
     setError(null);
-    setBusy(true);
-    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-    if (result.error) {
-      setError("Google sign-in did not complete. Please try again.");
-      setBusy(false);
-      return;
-    }
-    if (result.redirected) return;
-    setBusy(false);
+    setMessage(null);
   };
+
 
   return (
     <div className="grid min-h-screen place-items-center bg-background px-4 py-10 text-foreground">
